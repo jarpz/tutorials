@@ -6,6 +6,5 @@ import java.util.Optional;
 
 public interface UserPort {
 
-    Optional<User> findBy(String username,
-                          String password);
+    Optional<User> findBy(String username, String password);
 }

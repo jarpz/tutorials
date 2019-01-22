@@ -7,14 +7,16 @@ import com.baeldung.port.UserInterfacePort;
 import com.baeldung.port.UserPort;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DoLoginTests {
@@ -30,26 +32,24 @@ public class DoLoginTests {
     private ArgumentCaptor<LoginResponse> captor;
 
     @Test
-    public void when_userAndPassword_thenReturnUser() throws Exception {
-        when(userPort.findBy(any(), any()))
+    public void givenUserAndPassword_whenAttemptToLogin_thenReturnUser() {
+        when(userPort
+                .findBy(any(), any()))
                 .thenReturn(Optional.of(new User("Baeldung")));
 
-        doLogin.execute(new LoginRequest("baeldung", "123456"),
-                userInterfacePort);
+        doLogin.execute(new LoginRequest("baeldung", "123456"), userInterfacePort);
 
-        Mockito.verify(userInterfacePort, Mockito.times(1))
+        verify(userInterfacePort, times(1))
                 .accept(captor.capture());
 
         assertEquals("Baeldung", captor.getValue().getName());
     }
 
     @Test(expected = IllegalStateException.class)
-    public void when_userAndPasswordIncorrect_thenThrowIllegalStateException() throws Exception {
-        when(userPort.findBy(any(),any()))
-                .thenReturn(Optional.empty());
+    public void whenUserAndPasswordIncorrect_whenAttemptToLogin_thenThrowIllegalStateException() throws Exception {
+        when(userPort.findBy(any(), any())).thenReturn(Optional.empty());
 
-        doLogin.execute(new LoginRequest("baeldung","123456"),
-                userInterfacePort);
+        doLogin.execute(new LoginRequest("baeldung", "123456"), userInterfacePort);
 
     }
 }

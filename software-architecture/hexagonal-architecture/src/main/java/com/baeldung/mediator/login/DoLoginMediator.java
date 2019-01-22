@@ -17,17 +17,14 @@ public class DoLoginMediator implements Mediator<LoginRequest> {
 
     @Override
     public void execute(LoginRequest req,
-                        UserInterfacePort userInterfacePort) throws Exception {
+                        UserInterfacePort userInterfacePort) {
+
         User user = userPort
                 .findBy(req.getUsername(),
                         req.getPassword())
-                .orElseThrow(()-> new IllegalStateException("user not found"));
+                .orElseThrow(() -> new IllegalStateException("user not found"));
 
         userInterfacePort.accept(new LoginResponse(user.getName()));
     }
 
-    @Override
-    public void discard() {
-
-    }
 }
