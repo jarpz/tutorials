@@ -33,6 +33,7 @@ public class DoLoginTests {
 
     @Test
     public void givenUserAndPassword_whenAttemptToLogin_thenReturnUser() {
+
         when(userPort
                 .findBy(any(), any()))
                 .thenReturn(Optional.of(new User("Baeldung")));
@@ -46,8 +47,10 @@ public class DoLoginTests {
     }
 
     @Test(expected = IllegalStateException.class)
-    public void whenUserAndPasswordIncorrect_whenAttemptToLogin_thenThrowIllegalStateException() throws Exception {
-        when(userPort.findBy(any(), any())).thenReturn(Optional.empty());
+    public void whenUserAndPasswordIncorrect_whenAttemptToLogin_thenThrowIllegalStateException() {
+
+        when(userPort.findBy(any(), any()))
+                .thenReturn(Optional.empty());
 
         doLogin.execute(new LoginRequest("baeldung", "123456"), userInterfacePort);
 
